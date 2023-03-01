@@ -37,20 +37,8 @@ mongoose.connect(dbUrl, {
 
 const app = express();
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    touchAfter: 24 * 60 * 60,
-    crypto: {
-        secret
-    }
-})
-
-store.on("error", function (e) {
-    console.log("SESSION STORE ERROR", e);
-})
 
 app.use(session({
-    store,
     secret,
     resave: false,
     saveUninitialized: false
