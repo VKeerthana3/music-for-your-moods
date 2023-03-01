@@ -70,7 +70,7 @@ app.get("/", async (req, res) => {
             queryString.stringify({
                 grant_type: "authorization_code",
                 code: req.query.code,
-                redirect_uri: 'https://immense-refuge-76074.herokuapp.com'
+                redirect_uri: 'https://immense-refuge-76074.herokuapp.com/'
             }),
             {
                 headers: {
