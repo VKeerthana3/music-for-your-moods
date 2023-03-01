@@ -63,14 +63,14 @@ app.get("/login", (req, res) => {
     res.render("login.ejs");
 })
 
-app.get("/", async (req, res) => {
+app.get("/account", async (req, res) => {
     try{
         const spotifyResponse = await axios.post(
             "https://accounts.spotify.com/api/token",
             queryString.stringify({
                 grant_type: "authorization_code",
                 code: req.query.code,
-                redirect_uri: 'https://immense-refuge-76074.herokuapp.com/'
+                redirect_uri: 'https://immense-refuge-76074.herokuapp.com/account'
             }),
             {
                 headers: {
