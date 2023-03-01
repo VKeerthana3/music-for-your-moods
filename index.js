@@ -84,7 +84,7 @@ app.get("/account", async (req, res) => {
 
         res.render("home.ejs");
     } catch (e) {
-        console.log(e);
+        console.log(JSON.stringify(e));
     }
 })
 
