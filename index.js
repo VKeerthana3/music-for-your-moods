@@ -637,6 +637,6 @@ app.get("/search", async (req, res) => {
 })
 
 
-app.listen(8080, (req, res) => {
+app.listen(process.env.PORT, (req, res) => {
     console.log("Server is listening...");
 })
