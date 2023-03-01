@@ -71,7 +71,7 @@ app.get("/account", async (req, res) => {
             queryString.stringify({
                 grant_type: "authorization_code",
                 code: req.query.code,
-                redirect_uri: 'https://immense-refuge-76074.herokuapp.com/account'
+                redirect_uri: "https://immense-refuge-76074.herokuapp.com/account"
             }),
             {
                 headers: {
@@ -86,7 +86,7 @@ app.get("/account", async (req, res) => {
 
         res.render("home.ejs");
     } catch (e) {
-        console.log(JSON.stringify(e));
+        console.log(JSON.stringify(e), null, 2);
     }
 })
 
