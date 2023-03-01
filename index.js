@@ -639,6 +639,8 @@ app.get("/search", async (req, res) => {
 })
 
 const port = process.env.PORT || 8080;
-app.listen(port, (req, res) => {
+const server = app.listen(port, (req, res) => {
     console.log("Server is listening...");
 })
+
+server.timeout = 60000;
