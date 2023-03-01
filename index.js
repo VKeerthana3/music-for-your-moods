@@ -11,7 +11,7 @@ const path = require("path");
 const axios = require("axios");
 const queryString = require("querystring");
 const { v4 : uuid } = require("uuid");
-const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/spotify';
 
 const secret = process.env.SECRET
 
@@ -64,6 +64,7 @@ app.get("/login", (req, res) => {
 })
 
 app.get("/account", async (req, res) => {
+    console.log('in account route')
     try{
         const spotifyResponse = await axios.post(
             "https://accounts.spotify.com/api/token",
@@ -79,6 +80,7 @@ app.get("/account", async (req, res) => {
                 }
             }
         );
+        console.log('finished post');
         req.session.accessToken = spotifyResponse.data.access_token;
         console.log(spotifyResponse.data);
 
@@ -636,7 +638,7 @@ app.get("/search", async (req, res) => {
     }
 })
 
-
-app.listen(process.env.PORT, (req, res) => {
+const port = process.env.PORT || 8080;
+app.listen(port, (req, res) => {
     console.log("Server is listening...");
 })
