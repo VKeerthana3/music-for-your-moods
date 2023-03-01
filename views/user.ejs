@@ -1,0 +1,35 @@
+
+
+    <%- include('./partials/header')%>
+    <div class="no-bg bg">
+    <%- include('./partials/navbar')%>
+    
+                   
+    <p class="searchHistory">Name: <%= currentUser.name %></p>
+    <h4 class="searchHistory"><br>Search History: <br></h4>
+    <% for (let search of currentUser.searchHistory.reverse()) { %>
+
+        <div class="searchHistory">
+           
+            <p><br>Date:<%= search.dateToday%><br>Artist: <%= search.artistName%></p>
+        </div>
+
+        
+    <% } %>
+
+    <div class="searchHistory">
+        <h4 class="searchHistory"><br>Playlists</h4>
+        <% for (let pList of currentUser.playlists){ %>
+            <p><br>Mood: <%= pList.mood%></p>
+            <p>Playlist ID: <a id="user" href="/showTracks/<%= pList.id%>"><%= pList.id%></a></p>
+        <% } %>
+    </div>
+        
+    
+    </div>
+    
+    
+    <%- include('./partials/footer')%>
+            
+            
+    

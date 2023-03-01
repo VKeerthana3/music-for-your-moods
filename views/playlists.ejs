@@ -1,0 +1,43 @@
+
+
+<%- include('./partials/header')%>
+<div class="no-bg bg">
+<%- include('./partials/navbar')%>
+
+
+
+<div class="spotify-playlists">
+                   
+    
+    <% for(let pList of playlists) { %>
+        <div class="list">
+        <div class="item">
+
+        <img src="<%= (pList.images[0].url) %>" />
+        <p>Name: <%= pList.name%></p>
+        <p>Total tracks: <%= pList.tracks.total%></p>
+
+        <% if (path.includes('/playlists/') ) { %>
+            <form method="POST" action="/playlists/<%= pList.id%>/<%= trackUri%>">
+                <button id="finalAdd">Add to Playlist</button>
+            </form>
+            
+        <% } %>
+
+        
+    </div>
+
+</div>
+<% } %>
+</div>
+
+
+
+        
+  </div>
+
+
+
+    
+        
+<%- include('./partials/footer')%>

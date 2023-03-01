@@ -1,0 +1,35 @@
+
+
+<%- include('./partials/header')%>
+
+<div class="no-bg bg">
+<%- include('./partials/navbar')%>
+
+
+
+<div class="spotify-playlists">
+    
+
+               
+
+    <% for(let track of tracks) { %>
+        <div class="list">
+        <div class="item">
+
+        <img src="<%= (track.track.album.images[0].url) %>" />
+        <p>Album: <%= track.track.album.name%></p>
+        <p>Track: <%= track.track.name%></p>
+        <% for (let artist of track.track.artists) { %>
+        <p><a href="/artists/<%= artist.id%>">Artist(s): <%= artist.name%></a></p>
+        
+        <% } %>
+    </div>
+
+</div>
+<% } %>
+</div>
+</div>
+
+    
+
+<%- include('./partials/footer')%>

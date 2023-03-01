@@ -1,0 +1,28 @@
+
+
+<%- include('./partials/header')%>
+<div class="no-bg bg">
+<%- include('./partials/navbar')%>
+
+
+<div class="spotify-playlists">
+               
+
+    <% for(let album of albums) { %>
+        <div class="list">
+        <div class="item">
+
+        <a href="/albums/<%= album.id%>"><img src="<%= (album.images[0].url) %>" /></a>
+        <a href="/albums/<%= album.id%>"><p>Album: <%= album.name%></p></a>
+        <a href="/albums/<%= album.id%>"><p>Release Date: <%= album.release_date%></p></a>
+        
+        
+    </div>
+
+</div>
+<% } %>
+</div>
+</div>
+        
+        
+<%- include('./partials/footer')%>

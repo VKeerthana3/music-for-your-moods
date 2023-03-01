@@ -1,0 +1,39 @@
+
+
+<%- include('./partials/header')%>
+<div class="no-bg bg">
+<%- include('./partials/navbar')%>
+
+<div class="spotify-playlists">
+                   
+    
+    <% for(let track of tracks) { %>
+        <div class="list">
+        <div class="item">
+
+        
+        
+        <p>Track: <%= track.name%></p>
+        <% for (let artist of track.artists) { %>
+            <a id="addSong" href="/playlists/<%= track.uri%>">Add to playlist</a>
+        
+        <% } %>
+    </div>
+
+</div>
+<% } %>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<%- include('./partials/footer')%>
+        
+        

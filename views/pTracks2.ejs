@@ -1,0 +1,31 @@
+
+
+<%- include('./partials/header')%>
+<div class="no-bg bg">
+<%- include('./partials/navbar')%>
+
+  
+
+<div class="spotify-playlists">
+
+    
+<% for (let track of pTracks) { %>
+    <div class="list">
+        <div class="item">
+            <img src="<%= (track.track.album.images[0].url) %>" />
+    <p>Track: <%= JSON.stringify(track.track.name)%></p>
+    <p>Album: <%= JSON.stringify(track.track.album.name)%></p>      
+    
+    
+    </div>
+</div>
+
+<% } %>
+
+</div>
+</div>
+
+
+<%- include('./partials/footer')%>
+        
+        

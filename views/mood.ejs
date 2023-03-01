@@ -1,0 +1,20 @@
+<%- include('./partials/header')%>
+<%- include('./partials/navbar')%>
+
+<div class="getMood">
+    <h3>On a scale from 1 to 10, how happy are you?</h3>
+
+    <form method="GET" action="/trial">
+        
+        <input id="mood" type="number" name="mood" placeholder="mood" step="0.05"/>
+        <button>Generate Playlist</button>
+    </form>
+</div>
+
+
+
+<%- include('./partials/footer')%>
+
+
+
+
