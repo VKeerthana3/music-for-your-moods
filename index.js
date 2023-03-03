@@ -59,6 +59,10 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.get("/", (req, res) => {
+    res.redirect("/login");
+})
+
 app.get("/login", (req, res) => {
     res.render("login.ejs");
 })
@@ -177,25 +181,6 @@ app.get("/tracks", async (req, res) => {
 
 })
 
-app.get("/artists", async (req, res) => {
-    try{
-        const accessToken = req.session.accessToken;
-       
-        let result = await axios.get("https://api.spotify.com/v1/artists",
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-        
-        //console.log("this is the result "+JSON.stringify(result.data));
-    } catch (err) {
-        res.send(err);
-        console.log("error");
-        console.log(err);
-    }
-
-})
 
 app.get("/artists/:id", async (req, res) => {
     try{
@@ -369,7 +354,7 @@ app.get('/getMood', (req, res) => {
     res.render('mood.ejs');
 })
 
-app.get("/trial", async (req, res) => {
+app.get("/mood", async (req, res) => {
     try{
         let moodValue = parseFloat(req.query.mood);
         //console.log("Mood value is of type: "+typeof moodValue);
