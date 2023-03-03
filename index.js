@@ -15,16 +15,11 @@ const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/spotify';
 
 const secret = process.env.SECRET
 
-//process.env.;DB_URL
 
 const User = require("./models/user");
 const Playlist = require("./models/playList");
 const Track = require("./models/track");
 
-
-
-//const { response } = require("express");
-//"mongodb://127.0.0.1:27017/spotify"
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true
@@ -108,31 +103,9 @@ app.get("/user", async (req, res) => {
             },
         });
         
-        console.log("this is the result "+JSON.stringify(result.data, null, 2));
-        //console.log(result.data.display_name)
-        //console.log(result.data.id)
-        //console.log(result.data.uri)
-       
-
+      
         let currentUser = await User.findOne({id: result.data.id}).populate('playlists');
-        console.log("Myself is "+ currentUser);
-
-        /** 
-        for (let pList of currentUser.playlists){
-            for (let track of pList.tracks){
-                console.log("The track one by one: "+track);
-                console.log(`https://api.spotify.com/v1/tracks/${track}`);
-                let myTrack = await axios.get(`https://api.spotify.com/v1/tracks/${track}`,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-        console.log("My Tracks are: "+myTrack);
-            }
-        }
-        */      
-            
+                 
         
 
         if (currentUser === null){            
@@ -143,7 +116,7 @@ app.get("/user", async (req, res) => {
                     playlists: [],
                     searchHistory: []                
             })
-            console.log('going to add');
+            
         await currentUser.save();
         console.log("Adding your user to the database");
         
@@ -168,13 +141,13 @@ app.get("/tracks", async (req, res) => {
             },
         });
         
-        //console.log("this is the result "+JSON.stringify(result.data, null, 2));
+        
         const tracks = result.data.items;
-       // console.log(tracks);
+       
 
         res.render("tracks.ejs", {tracks: tracks});
     } catch (err) {
-        res.status(400).send(err);
+        res.send(err);
         console.log("error");
         console.log(err);
     }
@@ -195,7 +168,7 @@ app.get("/artists/:id", async (req, res) => {
             },
         });
         
-        //console.log("this is the result "+JSON.stringify(result.data, null, 2));
+        
         const albums = result.data.items;
 
         res.render("albums.ejs", {albums});
@@ -219,8 +192,7 @@ app.get("/albums/:id", async (req, res) => {
         
         console.log("this is the result albums tracks "+JSON.stringify(result.data.items[0], null, 2));
         const tracks = result.data.items;
-        //console.log("These are the tracks");
-        //console.log(tracks);
+       
 
         res.render("albums_tracks.ejs", {tracks});
     } catch (err) {
@@ -285,7 +257,7 @@ app.post("/playlists/:playListid/:trackUri", async (req, res) => {
 
         })
         let result = await my_result.json();
-        //console.log("The result is " + result);
+        
 
         console.log("added")
 
@@ -298,23 +270,7 @@ app.post("/playlists/:playListid/:trackUri", async (req, res) => {
             console.log("showing")
             const playlistTracks = result2.data.items;
             console.log("tracks"+JSON.stringify(playlistTracks[0], null, 2));
-/**
-        const config = {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json"
-            }
-        };
-       
-        await axios.post(`https://api.spotify.com/v1/playlists/${req.params.playListid}/tracks?uris=${req.params.trackUri}`, config);
-            
-       */
-        
-        //console.log("this is the post playlists "+JSON.stringify(result.data, null, 2));
 
-        //res.send("Added track to playlist");
-
-        //res.redirect(`/playlists/${req.params.playListid}`);
         res.render('pTracks.ejs', {playlistTracks});
         
         
@@ -349,7 +305,6 @@ app.get('/showTracks/:id', async (req, res) => {
 })
 
 
-
 app.get('/getMood', (req, res) => {
     res.render('mood.ejs');
 })
@@ -357,7 +312,6 @@ app.get('/getMood', (req, res) => {
 app.get("/mood", async (req, res) => {
     try{
         let moodValue = parseFloat(req.query.mood);
-        //console.log("Mood value is of type: "+typeof moodValue);
 
         let finalTracks = [];
         let finalArtists = [];
@@ -373,8 +327,6 @@ app.get("/mood", async (req, res) => {
             },
         });
 
-        //console.log("this is the top artists "+JSON.stringify(topArtists.data, null, 2));
-        
         let followedArtists = await axios.get('https://api.spotify.com/v1/me/following?type=artist',
         {
             headers: {
@@ -382,7 +334,6 @@ app.get("/mood", async (req, res) => {
             },
         })
 
-        //console.log("this is the followed artists "+JSON.stringify(followedArtists.data, null, 2));
 
         let totalArtists = topArtists.data.items.concat(followedArtists.data.artists.items);
 
@@ -392,22 +343,17 @@ app.get("/mood", async (req, res) => {
             }
         }
 
-        //console.log("Total artists: ", finalArtists);
 
         for (let artist of finalArtists){
-            //console.log("Artist id: ", artist.id)
+           
             let topTracks = await axios.get(`https://api.spotify.com/v1/artists/${artist.id}/top-tracks?country=US`,
             {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
             })
-           // console.log("Top tracks");
-            //console.log(topTracks.data.tracks);
-            finalTracks = finalTracks.concat(topTracks.data.tracks);
-            //console.log("==========");
-            //console.log(finalTracks);
 
+            finalTracks = finalTracks.concat(topTracks.data.tracks);
         }
 
         for (let track of finalTracks){            
@@ -419,8 +365,6 @@ app.get("/mood", async (req, res) => {
                     "Content-Type": "application-json",
                 }
             });
-
-            //console.log("Audio feature of track is " + JSON.stringify(audioFeatures.data, null, 2))
 
             if (moodValue < 0.10) {
                 console.log("Mood value in first confiton less than 0.1");
@@ -590,20 +534,11 @@ app.get("/search", async (req, res) => {
 
         let newSearchHistory = {date, artistId, artistName };
 
-      //  let currentUser = await User.findOneAndUpdate({id: myProfile.data.id}, {$set: 
-        //    {"searchHistory.artistId" : artistId}},
-          //  {new: true});
-
           let currentUser = await User.findOneAndUpdate({id: myProfile.data.id}, {$push: 
             {searchHistory : newSearchHistory}},
             {new: true}); 
 
         console.log("Actual current user: "+currentUser);
-
-        //currentUser.searchHistory.artistId = artistId;
-        //currentUser.playlists = [];
-        //currentUser.save();
-
 
         let artistAlbums = await axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums`,
         {
@@ -624,8 +559,8 @@ app.get("/search", async (req, res) => {
 })
 
 const port = process.env.PORT || 8080;
-const server = app.listen(port, (req, res) => {
+app.listen(port, (req, res) => {
     console.log("Server is listening...");
 })
 
-server.timeout = 60000;
+//server.timeout = 60000;
