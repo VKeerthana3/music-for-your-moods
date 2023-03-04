@@ -280,10 +280,8 @@ app.get('/showTracks/:id', async (req, res) => {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
+
             let pTracks = result2.data.items;
-            //console.log("The tracks i added: "+JSON.stringify(pTracks[0], null, 2));
-            //console.log("checking :"+JSON.stringify(pTracks[0].track, null, 2))
-            //console.log("-----")
             res.render('pTracks2.ejs', {pTracks});
     } catch(err){
         res.send(err);
