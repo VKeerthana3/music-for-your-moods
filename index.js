@@ -10,7 +10,6 @@ const ejs = require("ejs");
 const path = require("path");
 const axios = require("axios");
 const queryString = require("querystring");
-//const { v4 : uuid } = require("uuid");
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/spotify';
 
 const secret = process.env.SECRET
@@ -62,6 +61,7 @@ app.get("/login", (req, res) => {
     res.render("login.ejs");
 })
 
+// Connects the application to your spotify account
 app.get("/account", async (req, res) => {
     console.log('in account route')
     try{
@@ -89,10 +89,12 @@ app.get("/account", async (req, res) => {
     }
 })
 
+
 app.get("/home", async (req, res) => {
     res.render("home.ejs");
 })
 
+// Get user details 
 app.get("/user", async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -129,6 +131,7 @@ app.get("/user", async (req, res) => {
     }
 })
 
+// Followed tracks route
 app.get("/tracks", async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -149,7 +152,7 @@ app.get("/tracks", async (req, res) => {
 
 })
 
-
+// Fetches albums of a particular artist
 app.get("/artists/:id", async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -172,6 +175,7 @@ app.get("/artists/:id", async (req, res) => {
     }
 })
 
+// Fetches tracks of a particular album
 app.get("/albums/:id", async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -193,6 +197,7 @@ app.get("/albums/:id", async (req, res) => {
     }
 })
 
+// Fetches user's playlists
 app.get("/playlists", async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -213,6 +218,7 @@ app.get("/playlists", async (req, res) => {
     }
 })
 
+// Fetches playlists, and modifies the rendered ejs file by adding an 'Add to playlist' button 
 app.get("/playlists/:id", async (req, res) => {
     try {
         const accessToken = req.session.accessToken;
@@ -231,6 +237,7 @@ app.get("/playlists/:id", async (req, res) => {
 }
 })
 
+// Post route to add tracks to a playlists
 app.post("/playlists/:playListid/:trackUri", async (req, res) => {
     try{
 
@@ -263,6 +270,7 @@ app.post("/playlists/:playListid/:trackUri", async (req, res) => {
     }
 })
 
+// Shows tracks of a paricular playlist
 app.get('/showTracks/:id', async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -273,9 +281,9 @@ app.get('/showTracks/:id', async (req, res) => {
                 },
             });
             let pTracks = result2.data.items;
-            console.log("The tracks i added: "+JSON.stringify(pTracks[0], null, 2));
-            console.log("checking :"+JSON.stringify(pTracks[0].track, null, 2))
-            console.log("-----")
+            //console.log("The tracks i added: "+JSON.stringify(pTracks[0], null, 2));
+            //console.log("checking :"+JSON.stringify(pTracks[0].track, null, 2))
+            //console.log("-----")
             res.render('pTracks2.ejs', {pTracks});
     } catch(err){
         res.send(err);
@@ -284,11 +292,13 @@ app.get('/showTracks/:id', async (req, res) => {
     }
 })
 
-
+// Renders form to ender mood value
 app.get('/getMood', (req, res) => {
     res.render('mood.ejs');
 })
 
+// Compares entered mood value to top and followed artists' tracks' audio features: danceability, energy, and 
+// valence to generate apropriate playlist and saves to database  
 app.get("/mood", async (req, res) => {
     try{
         let moodValue = parseFloat(req.query.mood);
@@ -461,6 +471,7 @@ app.get("/mood", async (req, res) => {
     }
 })
 
+// Fetches albums of searched artists and saves search history to database 
 app.get("/search", async (req, res) => {
     try{
         const accessToken = req.session.accessToken;
@@ -527,4 +538,3 @@ const port = process.env.PORT || 8080;
 app.listen(port, (req, res) => {
     console.log("Server is listening...");
 })
-
