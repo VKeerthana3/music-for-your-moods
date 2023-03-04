@@ -10,7 +10,7 @@ const ejs = require("ejs");
 const path = require("path");
 const axios = require("axios");
 const queryString = require("querystring");
-const { v4 : uuid } = require("uuid");
+//const { v4 : uuid } = require("uuid");
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/spotify';
 
 const secret = process.env.SECRET
@@ -105,8 +105,6 @@ app.get("/user", async (req, res) => {
         
       
         let currentUser = await User.findOne({id: result.data.id}).populate('playlists');
-                 
-        
 
         if (currentUser === null){            
                 currentUser = new User({
@@ -141,10 +139,7 @@ app.get("/tracks", async (req, res) => {
             },
         });
         
-        
         const tracks = result.data.items;
-       
-
         res.render("tracks.ejs", {tracks: tracks});
     } catch (err) {
         res.send(err);
@@ -168,9 +163,7 @@ app.get("/artists/:id", async (req, res) => {
             },
         });
         
-        
         const albums = result.data.items;
-
         res.render("albums.ejs", {albums});
     } catch (err) {
         res.send(err);
@@ -190,10 +183,8 @@ app.get("/albums/:id", async (req, res) => {
             },
         });
         
-        console.log("this is the result albums tracks "+JSON.stringify(result.data.items[0], null, 2));
+        
         const tracks = result.data.items;
-       
-
         res.render("albums_tracks.ejs", {tracks});
     } catch (err) {
         res.send(err);
@@ -213,8 +204,6 @@ app.get("/playlists", async (req, res) => {
             },
         });
         
-        console.log("this is the result "+JSON.stringify(result.data.items[0], null, 2));
-
         const playlists = result.data.items;
         res.render("playlists.ejs", {playlists, path: req.path})
     } catch (err) {
@@ -246,7 +235,6 @@ app.post("/playlists/:playListid/:trackUri", async (req, res) => {
     try{
 
         const accessToken = req.session.accessToken;
-        console.log("in the post request");
 
         let my_result = await fetch(`https://api.spotify.com/v1/playlists/${req.params.playListid}/tracks?uris=${req.params.trackUri}`, {
             method: 'POST',
@@ -257,9 +245,6 @@ app.post("/playlists/:playListid/:trackUri", async (req, res) => {
 
         })
         let result = await my_result.json();
-        
-
-        console.log("added")
 
         let result2 = await axios.get(`https://api.spotify.com/v1/playlists/${req.params.playListid}/tracks`,
             {
@@ -267,19 +252,15 @@ app.post("/playlists/:playListid/:trackUri", async (req, res) => {
                     Authorization: `Bearer ${accessToken}`,
                 },
             });
-            console.log("showing")
             const playlistTracks = result2.data.items;
-            console.log("tracks"+JSON.stringify(playlistTracks[0], null, 2));
-
+            
         res.render('pTracks.ejs', {playlistTracks});
-        
         
     } catch (err){
         res.send(err);
         console.log("error");
         console.log(err);
     }
-
 })
 
 app.get('/showTracks/:id', async (req, res) => {
@@ -301,7 +282,6 @@ app.get('/showTracks/:id', async (req, res) => {
         console.log("error");
         console.log(err);
     }
-    
 })
 
 
@@ -334,7 +314,6 @@ app.get("/mood", async (req, res) => {
             },
         })
 
-
         let totalArtists = topArtists.data.items.concat(followedArtists.data.artists.items);
 
         for(let artist of totalArtists){
@@ -342,7 +321,6 @@ app.get("/mood", async (req, res) => {
                 finalArtists.push(artist)
             }
         }
-
 
         for (let artist of finalArtists){
            
@@ -352,7 +330,6 @@ app.get("/mood", async (req, res) => {
                     Authorization: `Bearer ${accessToken}`,
                 },
             })
-
             finalTracks = finalTracks.concat(topTracks.data.tracks);
         }
 
@@ -410,12 +387,9 @@ app.get("/mood", async (req, res) => {
                 && audioFeatures.data["energy"] >= (moodValue / 1.5)){
                     recommendedTracks.push(track)
                 }
-            }      
-
+            }    
         }
-        console.log('Recommended tracks');
-        console.log(recommendedTracks);
-
+       
         let recommendedTracksUris = [];
         let trackObject = new Track({});
         let trackObjects = [];
@@ -457,7 +431,6 @@ app.get("/mood", async (req, res) => {
 
         let finalNewPlaylist = await newPLaylist.json();
 
-        console.log("New playlist: " + JSON.stringify(finalNewPlaylist, null, 2));
 
         let my_result = await fetch(`https://api.spotify.com/v1/playlists/${finalNewPlaylist.id}/tracks?uris=${recommendedTracksUris}`, {
             method: 'POST',
@@ -465,10 +438,8 @@ app.get("/mood", async (req, res) => {
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json",
             }
-
         })
         let result = await my_result.json();
-        console.log("The result is " + JSON.stringify(result, null, 2));
         
         let playListObject = new Playlist({});
         playListObject.id = finalNewPlaylist.id;
@@ -488,7 +459,6 @@ app.get("/mood", async (req, res) => {
         console.log("error");
         console.log(err);
     }
-
 })
 
 app.get("/search", async (req, res) => {
@@ -514,10 +484,7 @@ app.get("/search", async (req, res) => {
             },
         });
 
-        console.log("Current user is "+ JSON.stringify(myProfile.data, null, 2));
-
         let myself = await User.findOne({id: myProfile.data.id})
-        console.log("Myself is "+ myself);
 
         if (myself === null){
             let currentUser = new User({
@@ -538,7 +505,6 @@ app.get("/search", async (req, res) => {
             {searchHistory : newSearchHistory}},
             {new: true}); 
 
-        console.log("Actual current user: "+currentUser);
 
         let artistAlbums = await axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums`,
         {
@@ -547,7 +513,6 @@ app.get("/search", async (req, res) => {
             },
         });
 
-        console.log(artistAlbums.data.items);
         const albums = artistAlbums.data.items;
         res.render("search.ejs", {albums});
 
@@ -563,4 +528,3 @@ app.listen(port, (req, res) => {
     console.log("Server is listening...");
 })
 
-//server.timeout = 60000;
