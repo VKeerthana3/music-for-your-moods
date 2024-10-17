@@ -1,4 +1,4 @@
-                                                                            # Music for your Moods
+<h1 align="center">Welcome to My Profile</h1>
 
 I have developed a web application called Music for your Moods using NodeJS, Express web framework, MongoDB database, and the Spotify Web API. EJS was chosen as the template engine and the styling was done purely using CSS. Finally, the application was deployed on Heroku. The link to the application can be found here: https://immense-refuge-76074.herokuapp.com/login
 
